@@ -3,6 +3,9 @@ const app = express();
 
 const port = 3000;
 
+// Parse JSON bodies
+app.use(express.json());
+
 app.get("/", (req, res) => {
   res.send("All good to gowew!");
 });
