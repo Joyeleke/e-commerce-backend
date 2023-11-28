@@ -1,5 +1,6 @@
 const { Pool } = require("pg");
-require("dotenv").config({path: '../.env'});
+require("dotenv").config();
+
 
 const dbHost = process.env.PGHOST;
 const dbUser = process.env.PGUSER;
@@ -15,10 +16,5 @@ const pool = new Pool({
   port: dbPort,
 });
 
-async function test() {
-  const client = await pool.connect();
-  const res = await client.query("SELECT * FROM users");
-  console.log(res.rows[0]);
-}
-
-test();
+const query = (text, params) => pool.query(text, params);
+module.exports = {query};
