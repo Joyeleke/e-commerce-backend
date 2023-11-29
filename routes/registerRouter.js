@@ -1,5 +1,5 @@
 const registerRouter = require("express").Router();
-const VerifyNewUserRequest = require("../middleware/verifynewuserrequest")
+const VerifyNewUserRequest = require("../middleware/verifyNewUserRequest")
 const { createUser } = require("../db/user");
 
 
