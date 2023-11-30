@@ -2,6 +2,7 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 
 const { getUserByEmail } = require("../db/user");
+const { getUserCartId } = require("../db/cart");
 
 const strategy = new LocalStrategy(
   {
@@ -29,8 +30,18 @@ passport.serializeUser(function (user, done) {
   return done(null, user.user_id);
 });
 
-passport.deserializeUser(function (user_id, done) {
-  return done(null, user_id);
+passport.deserializeUser( async function (user_id, done) {
+  try {
+    const cart_id = await getUserCartId(user_id);
+    
+    if(!cart_id){
+      throw new Error(`User cart was never created: ${error.message}`)
+    }
+    return done(null, {user_id, cart_id});
+  } catch (error) {
+    console.log(error.message);
+    return done(error);
+  }
 });
 
 passport.use(strategy);

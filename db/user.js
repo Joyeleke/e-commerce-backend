@@ -1,13 +1,15 @@
+const { createUserCart } = require("./cart");
 const db = require("./index");
 
 const createUser = async (email, password) => {
   const query = {
-    text: "INSERT INTO users(email, password) VALUES($1, $2) RETURNING email",
+    text: "INSERT INTO users(email, password) VALUES($1, $2) RETURNING *",
     values: [email, password],
   };
 
   try {
     const result = await db.query(query);
+    await createUserCart(result.rows[0].user_id);
     return result.rows[0].email;
   } catch (error) {
     throw new Error(`Error creating user: ${error.message}`);

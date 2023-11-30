@@ -8,9 +8,9 @@ registerRouter.post("/", VerifyNewUserRequest, async (req, res) => {
 
   try {
     const createdEmail = await createUser(email, password);
-
     return res.send(createdEmail);
   } catch (error) {
+    console.log(error.message);
     return res.status(500).send("Error during registration");
   }
 });

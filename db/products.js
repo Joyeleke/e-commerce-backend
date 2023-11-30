@@ -7,7 +7,7 @@ const getAllProducts = async () => {
 
   try {
     const result = await db.query(query);
-    return result.rows[0];
+    return result.rows;
   } catch (error) {
     throw new Error(`Error getting products: ${error.message}`);
   }
