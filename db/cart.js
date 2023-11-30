@@ -4,7 +4,7 @@ const createUserCart = async (userId) => {
   const user_id = Number(userId);
 
   const query = {
-    text: "INSERT INTO cart(user_id) VALUES($1) RETURNING cart_id",
+    text: "INSERT INTO cart(user_id) VALUES($1)",
     values: [user_id],
   };
 
@@ -116,7 +116,21 @@ const deleteAllProductsFromCart = async (cart_id) => {
   } catch (error) {
     throw new Error(`Error deleting all items from cart: ${error.message}`);
   }
-}
+};
+
+const cartNotEmpty = async (cart_id) => {
+  const query = {
+    text: "SELECT EXISTS (SELECT 1 FROM cartitems WHERE cart_id = $1)",
+    values: [cart_id],
+  };
+
+  try {
+    const result = await db.query(query);
+    return result.rows[0].exists; 
+  } catch (error) {
+    throw new Error(`Error checking cart status: ${error.message}`);
+  }
+};
 
 module.exports = {
   createUserCart,
@@ -126,5 +140,6 @@ module.exports = {
   addProductToCart,
   updateProductInCart,
   deleteProductFromCart,
-  deleteAllProductsFromCart
+  deleteAllProductsFromCart,
+  cartNotEmpty
 };

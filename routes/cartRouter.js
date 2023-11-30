@@ -2,12 +2,14 @@ const cartRouter = require("express").Router();
 const verifyNewCartItemRequest = require("../middleware/verifyNewCartItemRequest");
 const verifyUpdateCartItemRequest = require("../middleware/verifyUpdateCartItemRequest");
 const verifyDeleteCartItemRequest = require("../middleware/verifyDeleteCartRequest");
+const verifyPlaceOrderRequest = require("../middleware/verifyPlaceOrderRequest");
+const { placeOrder } = require("../db/order");
 const {
   addProductToCart,
   getProductsFromCart,
   updateProductInCart,
   deleteProductFromCart,
-  deleteAllProductsFromCart
+  deleteAllProductsFromCart,
 } = require("../db/cart");
 
 cartRouter.post("/cartitems", verifyNewCartItemRequest, async (req, res) => {
@@ -72,8 +74,22 @@ cartRouter.delete(
   }
 );
 
+cartRouter.post("/checkout", verifyPlaceOrderRequest, async (req, res) => {
+  const cart_id = Number(req.user.cart_id);
+  const user_id = Number(req.user.user_id);
+
+  try {
+    await placeOrder(cart_id, user_id);
+    res.status(200).send("Order Placed!");
+  } catch (error) {
+    console.log(error.message);
+    return res.status(500).send("Internal server error!");
+  }
+});
+
 cartRouter.delete("/", async (req, res) => {
   const cart_id = Number(req.user.cart_id);
+
   try {
     deleteAllProductsFromCart(cart_id);
     res.status(200).send("Cart has been cleared!");
