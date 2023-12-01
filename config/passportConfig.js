@@ -1,5 +1,6 @@
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
+const bcrypt = require("bcrypt");
 
 const { getUserByEmail } = require("../db/user");
 const { getUserCartId } = require("../db/cart");
@@ -16,7 +17,9 @@ const strategy = new LocalStrategy(
       if (!user) {
         return done(null, false);
       }
-      if (user.password !== password) {
+
+      const matchedPassword = await bcrypt.compare(password, user.password);
+      if (!matchedPassword) {
         return done(null, false);
       }
       return done(null, user);

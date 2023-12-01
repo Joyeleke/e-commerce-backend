@@ -4,7 +4,7 @@ const VerifyNewUserRequest = async (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(400).send("Invalid email or password");
+    return res.status(400).send("Empty email or password in payload!");
   }
 
   try {

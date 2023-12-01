@@ -23,13 +23,6 @@ app.use(passport.session());
 //Import Router
 app.use(appRouter);
 
-app.get("/s", (req, res) => {
-  //  if(req.isAuthenticated()){
-    const user_id = req.user.user_id;
-    const cart_id = req.user.cart_id;
-    res.send(`Your user_id is ${user_id} and Your cart_id is ${cart_id}`);
-});
-
 const port = 3000;
 
 app.listen(port, () => {
