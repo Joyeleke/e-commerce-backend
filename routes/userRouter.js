@@ -1,7 +1,12 @@
 const userRouter = require("express").Router();
-const { getUserById, updateUserEmail, updateUserPassword } = require("../db/user");
 const {
-  verifyUpdateUserEmailRequest, verifyUpdateUserPasswordRequest
+  getUserById,
+  updateUserEmail,
+  updateUserPassword,
+} = require("../db/user");
+const {
+  verifyUpdateUserEmailRequest,
+  verifyUpdateUserPasswordRequest,
 } = require("../middleware/verifyUpdateUserRequest");
 
 userRouter.get("/", async (req, res) => {
@@ -12,9 +17,10 @@ userRouter.get("/", async (req, res) => {
     if (!user) {
       return res.status(404).send("User not found!");
     }
-    return res.send(user);
+    return res.status(200).send(user);
   } catch (error) {
-    return res.status(500).send("Internal server error!");
+    console.log(error.message);
+    return res.status(500).send("Server error getting user profile");
   }
 });
 
@@ -24,30 +30,33 @@ userRouter.put("/email", verifyUpdateUserEmailRequest, async (req, res) => {
 
   try {
     const updatedEmail = await updateUserEmail(email, userId);
-    return res.send(updatedEmail);
+    return res.status(200).send(updatedEmail);
   } catch (error) {
     console.log(error.message);
     return res.status(500).send("Internal server error!");
   }
 });
 
-userRouter.put("/password", verifyUpdateUserPasswordRequest, async (req, res) => {
+userRouter.put(
+  "/password",
+  verifyUpdateUserPasswordRequest,
+  async (req, res) => {
     const { password } = req.body;
     const userId = Number(req.user);
-  
+
     try {
       const updated = await updateUserPassword(password, userId);
 
-      if(updated){
-        return res.send("Password Updated!")
-      } else{
-        return res.status(500).send("Server has problem updating passsword!");
+      if (updated) {
+        return res.status(200).send("Password Updated!");
+      } else {
+        return res.status(500).send("Error updating passsword!");
       }
-      
     } catch (error) {
       console.log(error.message);
       return res.status(500).send("Internal server error!");
     }
-  });
+  }
+);
 
 module.exports = userRouter;

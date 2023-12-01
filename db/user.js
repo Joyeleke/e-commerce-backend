@@ -74,18 +74,13 @@ const updateUserEmail = async (email, id) => {
 
 const updateUserPassword = async (password, id) => {
   const query = {
-    text: "UPDATE users SET password = $1 WHERE user_id = $2 RETURNING user_id",
+    text: "UPDATE users SET password = $1 WHERE user_id = $2",
     values: [password, id],
   };
 
   try {
-    const result = await db.query(query);
-
-    if (result.rows[0].user_id == id) {
-      return true;
-    } else {
-      return false;
-    }
+    await db.query(query);
+    return true;
   } catch (error) {
     throw new Error(`Error getting user by id: ${error.message}`);
   }
@@ -97,5 +92,5 @@ module.exports = {
   getUserById,
   getExistingEmail,
   updateUserEmail,
-  updateUserPassword
+  updateUserPassword,
 };

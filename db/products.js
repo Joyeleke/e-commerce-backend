@@ -9,7 +9,7 @@ const getAllProducts = async () => {
     const result = await db.query(query);
     return result.rows;
   } catch (error) {
-    throw new Error(`Error getting products: ${error.message}`);
+    throw new Error(`Error getting all products: ${error.message}`);
   }
 };
 
@@ -29,5 +29,5 @@ const getProductById = async (product_id) => {
 
 module.exports = {
   getAllProducts,
-  getProductById
+  getProductById,
 };

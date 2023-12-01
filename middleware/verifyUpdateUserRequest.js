@@ -14,7 +14,8 @@ const verifyUpdateUserEmailRequest = async (req, res, next) => {
       return res.status(409).send("Email already exists");
     }
   } catch (error) {
-    return res.status(500).send("Error checking email existence: "+ error.message);
+    console.log(error.message);
+    return res.status(500).send("Error checking email existence!");
   }
 
   next();

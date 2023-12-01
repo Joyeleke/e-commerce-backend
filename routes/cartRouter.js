@@ -25,18 +25,19 @@ cartRouter.post("/cartitems", verifyNewCartItemRequest, async (req, res) => {
     res.status(200).send("Item Successfully Added");
   } catch (error) {
     console.log(error.message);
-    return res.status(500).send("Internal server error!");
+    return res.status(500).send("Error adding new item to cart!");
   }
 });
 
 cartRouter.get("/", async (req, res) => {
   const cart_id = Number(req.user.cart_id);
+
   try {
     const allCartItems = await getProductsFromCart(cart_id);
-    res.send(allCartItems);
+    res.status(200).send(allCartItems);
   } catch (error) {
     console.log(error.message);
-    return res.status(500).send("Internal server error!");
+    return res.status(500).send("Error getting items from cart!");
   }
 });
 
@@ -53,7 +54,7 @@ cartRouter.put("/", verifyUpdateCartItemRequest, async (req, res) => {
     res.status(200).send("Item Successfully Updated");
   } catch (error) {
     console.log(error.message);
-    return res.status(500).send("Internal server error!");
+    return res.status(500).send("Error updating item in cart");
   }
 });
 
@@ -69,7 +70,7 @@ cartRouter.delete(
       res.status(200).send("Item Successfully Deleted");
     } catch (error) {
       console.log(error.message);
-      return res.status(500).send("Internal server error!");
+      return res.status(500).send("Error deleting item from cart");
     }
   }
 );
@@ -83,7 +84,7 @@ cartRouter.post("/checkout", verifyPlaceOrderRequest, async (req, res) => {
     res.status(200).send("Order Placed!");
   } catch (error) {
     console.log(error.message);
-    return res.status(500).send("Internal server error!");
+    return res.status(500).send("Error placing order from cart");
   }
 });
 
@@ -95,7 +96,7 @@ cartRouter.delete("/", async (req, res) => {
     res.status(200).send("Cart has been cleared!");
   } catch (error) {
     console.log(error.message);
-    return res.status(500).send("Internal server error!");
+    return res.status(500).send("Error deleting all items from cart");
   }
 });
 

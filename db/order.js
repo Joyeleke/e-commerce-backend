@@ -76,25 +76,23 @@ const getAllOrders = async (user_id) => {
     return result.rows;
   } catch (error) {
     console.log(error.message);
-    throw new Error(`Error rolling back order: ${error.message}`);
+    throw new Error(`Error getting all orders: ${error.message}`);
   }
 };
 
 const getOrderById = async (order_id) => {
   const query = {
-    text: " SELECT p.name, p.price, p.description, oi.quantity FROM orderitems as oi JOIN products as p ON oi.product_id = p.product_id WHERE oi.order_id = $1",
+    text: "SELECT p.name, p.price, p.description, oi.quantity FROM orderitems as oi JOIN products as p ON oi.product_id = p.product_id WHERE oi.order_id = $1",
     values: [order_id],
   };
 
   try {
     const result = await db.query(query);
-    console.log(result.rows);
-    return result.rows;
+    return result.rows[0];
   } catch (error) {
     console.log(error.message);
-    throw new Error(`Error rolling back order: ${error.message}`);
+    throw new Error(`Error getting order by id: ${error.message}`);
   }
- 
 };
 
 module.exports = {

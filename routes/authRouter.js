@@ -25,7 +25,7 @@ authRouter.post("/register", VerifyNewUserRequest, async (req, res) => {
     return res.send(createdEmail);
   } catch (error) {
     console.log(error.message);
-    return res.status(500).send("Error during registration");
+    return res.status(500).send("Error during user registration");
   }
 });
 

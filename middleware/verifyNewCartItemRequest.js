@@ -10,7 +10,7 @@ const verifyNewCartItemRequest = async (req, res, next) => {
   }
 
   try {
-    const product = await getProductById(Number(product_id));
+    const product = await getProductById(product_id);
 
     if (!product) {
       return res.status(404).send("Product does not exist!");
@@ -22,7 +22,7 @@ const verifyNewCartItemRequest = async (req, res, next) => {
     );
 
     if (productExists === true) {
-      return res.status(404).send("Product already exists in cart");
+      return res.status(409).send("Product already exists in cart");
     }
 
     req.product = { product_id, quantity };

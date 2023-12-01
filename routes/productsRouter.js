@@ -12,21 +12,22 @@ productsRouter.param("productId", async (req, res, next, id) => {
     req.product = product;
     next();
   } catch (error) {
-    return res.status(500).send("Internal server error!");
+    console.log(error.message);
+    return res.status(500).send("Error getting product!");
   }
 });
 
 productsRouter.get("/", async (req, res) => {
   try {
     const products = await getAllProducts();
-    return res.send(products);
+    return res.status(200).send(products);
   } catch (error) {
     return res.send(500).status("Internal status error here!");
   }
 });
 
 productsRouter.get("/:productId", async (req, res) => {
-  res.send(req.product);
+  res.status(200).send(req.product);
 });
 
 module.exports = productsRouter;

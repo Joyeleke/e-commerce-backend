@@ -9,7 +9,7 @@ const verifyDeleteCartItemRequest = async (req, res, next) => {
   }
 
   try {
-    const product = await getProductById(Number(product_id));
+    const product = await getProductById(product_id);
 
     if (!product) {
       return res.status(404).send("Product does not exist!");

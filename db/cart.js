@@ -40,21 +40,19 @@ const getProductsFromCart = async (cart_id) => {
     const result = await db.query(query);
     return result.rows;
   } catch (error) {
-    throw new Error(`Error getting user cart: ${error.message}`);
+    throw new Error(`Error getting all items from cart: ${error.message}`);
   }
 };
 
 const productExistsInCart = async (cart_id, product_id) => {
   const query = {
-    text: "SELECT p.product_id FROM cartitems as ci JOIN cart as c ON c.cart_id = ci.cart_id JOIN products as p ON p.product_id = ci.product_id WHERE c.cart_id = $1 AND p.product_id = $2",
+    text: "SELECT EXISTS (SELECT p.product_id FROM cartitems as ci JOIN cart as c ON c.cart_id = ci.cart_id JOIN products as p ON p.product_id = ci.product_id WHERE c.cart_id = $1 AND p.product_id = $2)",
     values: [cart_id, product_id],
   };
 
   try {
     const result = await db.query(query);
-    if (result.rows[0]) {
-      return true;
-    }
+    return result.rows[0].exists;
   } catch (error) {
     throw new Error(
       `Error checking product existence in cart: ${error.message}`
@@ -126,7 +124,7 @@ const cartNotEmpty = async (cart_id) => {
 
   try {
     const result = await db.query(query);
-    return result.rows[0].exists; 
+    return result.rows[0].exists;
   } catch (error) {
     throw new Error(`Error checking cart status: ${error.message}`);
   }
@@ -141,5 +139,5 @@ module.exports = {
   updateProductInCart,
   deleteProductFromCart,
   deleteAllProductsFromCart,
-  cartNotEmpty
+  cartNotEmpty,
 };

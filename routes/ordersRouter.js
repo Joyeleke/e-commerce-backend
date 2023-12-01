@@ -1,5 +1,6 @@
 const ordersRouter = require("express").Router();
 const { getAllOrders } = require("../db/order");
+const verifyGetOrderByIdRequest = require("../middleware/verifyGetOrderByIdRequest");
 
 ordersRouter.get("/", async (req, res) => {
   const user_id = Number(req.user.user_id);
@@ -13,15 +14,9 @@ ordersRouter.get("/", async (req, res) => {
   }
 });
 
-ordersRouter.get("/:orderId", async (req, res) => {
+ordersRouter.get("/:orderId", verifyGetOrderByIdRequest, async (req, res) => {
   const order = req.order;
-
-  try {
-    res.status(200).send(order);
-  } catch (error) {
-    console.log(error.message);
-    return res.status(500).send("Error getting order by order Id");
-  }
+  return res.status(200).send(order);
 });
 
 module.exports = ordersRouter;
