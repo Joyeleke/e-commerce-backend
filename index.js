@@ -3,7 +3,7 @@ const app = express();
 
 const morgan = require("morgan");
 
-const sessionConfig = require("./config/sessionConfig")
+const sessionConfig = require("./config/sessionConfig");
 const passport = require("./config/passportConfig");
 const appRouter = require("./routes/appRouter");
 
